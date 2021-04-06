@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="ISO-8859-1">
+<title>Firebase Demo</title>
+<link rel="stylesheet" type="text/css" media="all" 
+th:href="@{/css/style.css}"/>
+<script th:src="@{/js/script.js}"></script>
+</head>
+<body>
+
+<h1>This is the view employees page.</h1>
+
+<h2>Employee List</h2>
+
+<table>
+	<tr>
+		<th>Id</th>
+		<th>Name</th>
+		<th>Age</th>
+		
+		<!-- Edit and Delete -->
+		<th>Edit</th>
+		<th>Delete</th>
+	</tr>
+	<tr th:each="e : ${employees}">
+		<td th:text="${e.id}"></td>
+		<td th:text="${e.name}"></td>
+		<td th:text="${e.age}"></td>
+		<td><a th:href="@{/edit/{name}(name=${e.name})}">EDIT</a></td>
+		<td><a th:href="@{/delete/{name}(name=${e.name})}">DELETE</a></td>
+	</tr>
+</table>
+
+<a th:href="@{/}"><button>Go Home</button></a><br>
+
+</body>
+</html>

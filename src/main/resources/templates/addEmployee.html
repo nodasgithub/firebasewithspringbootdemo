@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="ISO-8859-1">
+<title>Firebase Demo</title>
+<link rel="stylesheet" type="text/css" media="all" 
+th:href="@{/css/style.css}"/>
+</head>
+<body>
+
+<h1>This is the add employee page.</h1>
+
+<form action="#" th:action="@{/addEmployee}" th:object="${employee}" method="post">
+	
+		<table>
+			<tr>
+				<td>Id: </td>
+				<td>
+					<input type="number" name="id" step="1" min="0" value="0" required>
+				</td>
+			</tr>
+			<tr>
+				<td>Name: </td>
+				<td>
+					<input type="text" name="name" required>
+				</td>
+			</tr>
+			<tr>
+				<td>Age: </td>
+				<td>
+					<input type="number" name="age" step="1" min="0" value="0" required>
+				</td>
+			</tr>
+		</table>
+		
+		<input type="submit" value="Add Employee">
+	</form>
+
+<a th:href="@{/}"><button>Go Home</button></a><br>
+
+</body>
+</html>
