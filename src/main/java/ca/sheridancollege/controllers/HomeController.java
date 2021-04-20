@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.client.RestTemplate;
 import ca.sheridancollege.beans.*;
 import ca.sheridancollege.exporter.EmployeeExcelExporter;
+import ca.sheridancollege.importer.ExcelToFirebase;
 
 @Controller
 public class HomeController {
@@ -49,6 +50,11 @@ public class HomeController {
         return "viewEmployees.html";
     }
 	
+	@GetMapping("/addEmployeeFromExcel")
+	public String loadAddEmployeeFromExcel() {
+		
+		return "addEmployeeFromExcel.html";
+	}
 	
 	@GetMapping("/edit/{id}") 
 	public String goEditPlayer(@PathVariable int id, Model model, RestTemplate restTemplate){
@@ -132,11 +138,28 @@ public class HomeController {
         ResponseEntity<Employee[]> responseEntity = restTemplate
                 .getForEntity("http://localhost:8080/getAllEmployees", Employee[].class);
         
-        List<Employee> listEmployees = Arrays.asList(responseEntity.getBody());
+        List<Employee> empList = Arrays.asList(responseEntity.getBody());
         
-        EmployeeExcelExporter excelExporter = new EmployeeExcelExporter(listEmployees);
+        EmployeeExcelExporter excelExporter = new EmployeeExcelExporter(empList);
          
         excelExporter.export(response);    
+    }
+	
+	@GetMapping("/employees/import/excel")
+    public String importFromExcelToFirebase(RestTemplate restTemplate) throws IOException {
+		
+		if (ExcelToFirebase.convertExcelToFirebaseData() != null) {
+			List<Employee> empList = ExcelToFirebase.convertExcelToFirebaseData();
+			
+			System.out.println(empList.toString());
+
+	        restTemplate.postForEntity("http://localhost:8080/createMultipleEmployees", empList, String.class);
+			
+		} else {
+			System.out.println("Import failed");
+		}
+		
+		return "redirect:/addEmployeeFromExcel";
     }
 	
 	

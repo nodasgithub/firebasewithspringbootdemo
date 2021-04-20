@@ -64,6 +64,11 @@ public class APIController {
        return employeeService.saveEmployeeDetails(employee);
     }
 	
+	@PostMapping("/createMultipleEmployees")
+    public String createPatient(@RequestBody List<Employee> empList) throws InterruptedException, ExecutionException {
+       return employeeService.saveEmployees(empList);
+    }
+	
 	@PutMapping("/updateEmployee")  
 	public String updatePatient(@RequestBody Employee employee) throws InterruptedException, ExecutionException {  
 		return employeeService.updateEmployeeDetails(employee);  

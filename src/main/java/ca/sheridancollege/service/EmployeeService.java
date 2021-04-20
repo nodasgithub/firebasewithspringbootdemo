@@ -1,4 +1,5 @@
 package ca.sheridancollege.service;
+import java.util.List;
 import java.util.concurrent.ExecutionException;
 import org.springframework.stereotype.Component;
 
@@ -14,13 +15,27 @@ import ca.sheridancollege.beans.Employee;
 @Component
 public class EmployeeService {
 	
-	public static final String COL_NAME="Employee";  
+	public static final String COL_NAME="Employee";
+	
 	public String saveEmployeeDetails(Employee employee) throws InterruptedException, ExecutionException {  
 		Firestore dbFirestore = FirestoreClient.getFirestore();  
 		
 		ApiFuture<WriteResult> collectionsApiFuture = dbFirestore.collection(COL_NAME).document(employee.getName()).set(employee);  
 		
 		return collectionsApiFuture.get().getUpdateTime().toString();  
+	}
+	
+	public String saveEmployees(List<Employee> empList) throws InterruptedException, ExecutionException {  
+		Firestore dbFirestore = FirestoreClient.getFirestore();  
+		
+		System.out.println("###################################################################");
+		System.out.println("In the save empoyees class: " + empList.toString());
+		
+		for (Employee employee: empList) {
+			ApiFuture<WriteResult> collectionsApiFuture = dbFirestore.collection(COL_NAME).document(employee.getName()).set(employee);
+		}
+		
+		return "Collection added";  
 	}
 	
 	/**
