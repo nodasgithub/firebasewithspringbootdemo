@@ -23,6 +23,26 @@ public class EmployeeService {
 		return collectionsApiFuture.get().getUpdateTime().toString();  
 	}
 	
+	/**
+	public Employee getEmployeeDetails(int id) throws InterruptedException, ExecutionException {  
+		Firestore dbFirestore = FirestoreClient.getFirestore();  
+		
+		DocumentReference documentReference = dbFirestore.collection(COL_NAME).document(id + "");  
+		ApiFuture<DocumentSnapshot> future = documentReference.get();  
+		DocumentSnapshot document = future.get();  
+		
+		Employee employee = null;
+		
+		if(document.exists()) {  
+			employee = document.toObject(Employee.class); 
+			
+			return employee;
+		}else {  
+			return null;  
+		}
+	}
+	**/
+	
 	public Employee getEmployeeDetails(String name) throws InterruptedException, ExecutionException {  
 		Firestore dbFirestore = FirestoreClient.getFirestore();  
 		
