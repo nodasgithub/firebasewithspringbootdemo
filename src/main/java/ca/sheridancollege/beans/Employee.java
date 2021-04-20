@@ -1,4 +1,5 @@
 package ca.sheridancollege.beans;
+import com.google.cloud.firestore.annotation.DocumentId;
 import lombok.*;
 
 @NoArgsConstructor
@@ -7,7 +8,8 @@ import lombok.*;
 @Builder
 public class Employee {
 
-	private Integer id;
+	@DocumentId
+	private String id;
 	
 	private String name;
 	private int age;

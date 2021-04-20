@@ -63,71 +63,25 @@ public class HomeController {
 		return "addEmployeeFromExcel.html";
 	}
 	
-	@GetMapping("/edit/{id}") 
-	public String goEditPlayer(@PathVariable int id, Model model, RestTemplate restTemplate){
-		
-		ResponseEntity<Employee[]> responseEntity = restTemplate
-                .getForEntity("http://localhost:8080/getEmployeeDetails/" + id, Employee[].class);
-
-		model.addAttribute("employee", responseEntity.getBody());
-		
-		return "editEmployee.html";
-	}
+	@GetMapping("/edit/{id}")
+    public String goEditEmployee(@PathVariable String id, Model model, RestTemplate restTemplate) {
+        ResponseEntity<Employee> employee = restTemplate.getForEntity("http://localhost:8080/getEmployeeDetails" + "/" + id, Employee.class);
+        model.addAttribute("employee", employee.getBody());
+        return "editEmployee.html";
+    }
 	
-	/*
-	@PostMapping("/edit") 
-	public String modifyPlayer(@ModelAttribute Player player, Model model){
-
-		Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
-		
-		Set<ConstraintViolation<Player>> validationErrors = validator.validate(player);
-		
-		if (!validationErrors.isEmpty()) {
-			// Some errors have occurred
-			List<String> errors = new ArrayList<String>();
-			
-			for (ConstraintViolation<Player> e : validationErrors) {
-				errors.add(e.getPropertyPath() + "::" + e.getMessage());
-			}
-			
-			model.addAttribute("errorMessage", errors);
-			
-			// Go back to the edit page
-			return "editPlayer.html";
-			
-		} else {
-			playerRepo.save(player);
-		}
-		
-		model.addAttribute("players", playerRepo.findAll());
-		model.addAttribute("player", new Player());
-		
-		// The total number of players in the league
-		model.addAttribute("numberofplayers", countPlayersInTheLeague());
-		
-		return "viewPlayer.html";
-	}
-	*/
-	
-	/*
-	@GetMapping("/delete/{id}")
-    public String deleteEmployee(@PathVariable String name, RestTemplate restTemplate) {
-		
-		HttpHeaders headers = new HttpHeaders();
-		headers.setContentType(MediaType.APPLICATION_JSON);
-
-		Employee objEmp = new Employee();
-
-		HttpEntity<Employee> httpEntity = new HttpEntity<Employee>(objEmp, headers);
-		
-		
-		String url = "http://localhost:8080/deleteEmployee";
-		ResponseEntity<String> responseEntity = 
-			restTemplate.exchange(url, HttpMethod.DELETE, httpEntity, String.class, name); 
+	@PostMapping("/editEmployee")
+    public String editEmployee(@ModelAttribute Employee employee, RestTemplate restTemplate) {
+        restTemplate.postForEntity("http://localhost:8080/updateEmployee", employee, String.class);
         
         return "redirect:/viewEmployees";
     }
-    */
+	
+	@GetMapping("/delete/{id}")
+    public String deleteEmployee(@PathVariable String id, RestTemplate restTemplate) {
+        restTemplate.postForEntity("http://localhost:8080/deleteEmployee", id, String.class);
+        return "redirect:/viewEmployees";
+    }
 	
 	@GetMapping("/employees/export/excel")
     public void exportToExcel(HttpServletResponse response, RestTemplate restTemplate) throws IOException {
