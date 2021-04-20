@@ -150,8 +150,6 @@ public class HomeController {
 		
 		if (ExcelToFirebase.convertExcelToFirebaseData() != null) {
 			List<Employee> empList = ExcelToFirebase.convertExcelToFirebaseData();
-			
-			System.out.println(empList.toString());
 
 	        restTemplate.postForEntity("http://localhost:8080/createMultipleEmployees", empList, String.class);
 			

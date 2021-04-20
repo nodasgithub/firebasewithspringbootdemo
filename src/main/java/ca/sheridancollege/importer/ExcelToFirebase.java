@@ -19,8 +19,8 @@ public class ExcelToFirebase {
                 .toAbsolutePath()
                 .toString();
         
-        System.out.println("########################################################################");
-        System.out.println("Current Directory: " + userDirectory);
+        // For testing purposes
+        // System.out.println("Current Directory: " + userDirectory);
  
         try {
             long start = System.currentTimeMillis();
