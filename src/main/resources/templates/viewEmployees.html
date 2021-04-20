@@ -27,11 +27,12 @@ th:href="@{/css/style.css}"/>
 		<td th:text="${e.id}"></td>
 		<td th:text="${e.name}"></td>
 		<td th:text="${e.age}"></td>
-		<td><a th:href="@{/edit/{name}(name=${e.name})}">EDIT</a></td>
-		<td><a th:href="@{/delete/{name}(name=${e.name})}">DELETE</a></td>
+		<td><a th:href="@{/edit/{id}(id=${e.id})}">EDIT</a></td>
+		<td><a th:href="@{/delete/{id}(id=${e.id})}">DELETE</a></td>
 	</tr>
 </table>
 
+<a th:href="@{/employees/export/excel}"><button>Export to Excel</button></a><br>
 <a th:href="@{/}"><button>Go Home</button></a><br>
 
 </body>

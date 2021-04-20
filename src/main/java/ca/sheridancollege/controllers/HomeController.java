@@ -1,12 +1,11 @@
 package ca.sheridancollege.controllers;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
-
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.MediaType;
+import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
+import javax.servlet.http.HttpServletResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -14,11 +13,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.client.RestTemplate;
-
 import ca.sheridancollege.beans.*;
+import ca.sheridancollege.exporter.EmployeeExcelExporter;
 
 @Controller
 public class HomeController {
@@ -52,26 +49,57 @@ public class HomeController {
         return "viewEmployees.html";
     }
 	
-	/*
-	@GetMapping("/edit/{name}") 
-	public String goEditPlayer(@PathVariable int id, Model model){
+	
+	@GetMapping("/edit/{id}") 
+	public String goEditPlayer(@PathVariable int id, Model model, RestTemplate restTemplate){
 		
-		if (player.isPresent()) {
-			Player selectedPlayer = player.get();
-			model.addAttribute("player", selectedPlayer);
+		ResponseEntity<Employee[]> responseEntity = restTemplate
+                .getForEntity("http://localhost:8080/getEmployeeDetails/" + id, Employee[].class);
+        
+        model.addAttribute("employee", responseEntity.getBody());
+        
+        System.out.println("#########################################" + responseEntity.getBody().toString());
+		
+		return "editEmployee.html";
+	}
+	
+	/*
+	@PostMapping("/edit") 
+	public String modifyPlayer(@ModelAttribute Player player, Model model){
+
+		Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
+		
+		Set<ConstraintViolation<Player>> validationErrors = validator.validate(player);
+		
+		if (!validationErrors.isEmpty()) {
+			// Some errors have occurred
+			List<String> errors = new ArrayList<String>();
 			
+			for (ConstraintViolation<Player> e : validationErrors) {
+				errors.add(e.getPropertyPath() + "::" + e.getMessage());
+			}
+			
+			model.addAttribute("errorMessage", errors);
+			
+			// Go back to the edit page
 			return "editPlayer.html";
-		} else {
-			model.addAttribute("players", playerRepo.findAll());
-			model.addAttribute("player", new Player());
 			
-			return "redirect:/viewPlayer";
+		} else {
+			playerRepo.save(player);
 		}
+		
+		model.addAttribute("players", playerRepo.findAll());
+		model.addAttribute("player", new Player());
+		
+		// The total number of players in the league
+		model.addAttribute("numberofplayers", countPlayersInTheLeague());
+		
+		return "viewPlayer.html";
 	}
 	*/
 	
 	/*
-	@GetMapping("/delete/{name}")
+	@GetMapping("/delete/{id}")
     public String deleteEmployee(@PathVariable String name, RestTemplate restTemplate) {
 		
 		HttpHeaders headers = new HttpHeaders();
@@ -89,6 +117,28 @@ public class HomeController {
         return "redirect:/viewEmployees";
     }
     */
+	
+	@GetMapping("/employees/export/excel")
+    public void exportToExcel(HttpServletResponse response, RestTemplate restTemplate) throws IOException {
+		response.setContentType("application/octet-stream");
+		
+        DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
+        String currentDateTime = dateFormatter.format(new Date());
+        
+        String headerKey = "Content-Disposition";
+        String headerValue = "attachment; filename=employees_" + currentDateTime + ".xlsx";
+        response.setHeader(headerKey, headerValue);
+        
+        ResponseEntity<Employee[]> responseEntity = restTemplate
+                .getForEntity("http://localhost:8080/getAllEmployees", Employee[].class);
+        
+        List<Employee> listEmployees = Arrays.asList(responseEntity.getBody());
+        
+        EmployeeExcelExporter excelExporter = new EmployeeExcelExporter(listEmployees);
+         
+        excelExporter.export(response);    
+    }
+	
 	
 
 }

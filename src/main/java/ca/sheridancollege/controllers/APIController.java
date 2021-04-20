@@ -14,6 +14,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -68,11 +69,17 @@ public class APIController {
 		return employeeService.updateEmployeeDetails(employee);  
 	}  
 	 
-	 
 	@GetMapping("/getEmployeeDetails")  
 	public Employee getPatient(@RequestParam String name) throws InterruptedException, ExecutionException {  
 		return employeeService.getEmployeeDetails(name);  
 	}
+	
+	/*
+	@GetMapping("/getEmployeeDetails/{id}")  
+	public Employee getPatient(@PathVariable int id) throws InterruptedException, ExecutionException {  
+		return employeeService.getEmployeeDetails(id);  
+	}
+	*/
 	 
 	@DeleteMapping("/deleteEmployee")  
 	public String deletePatient(@RequestParam String name) {  
