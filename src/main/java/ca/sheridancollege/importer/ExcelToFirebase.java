@@ -4,28 +4,38 @@ import java.nio.file.Paths;
 import java.util.*;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import ca.sheridancollege.beans.Employee;
 
 public class ExcelToFirebase {
 	
-	public static List<Employee> convertExcelToFirebaseData() {
- 
-		String appToTheFolderPath = "src\\main\\resources\\static\\xlsx\\";
-		
-        String excelFilePath = appToTheFolderPath + "employees.xlsx";
+	public static List<Employee> convertExcelToFirebaseData(MultipartFile file) {
         
         String userDirectory = Paths.get("")
                 .toAbsolutePath()
                 .toString();
         
-        System.out.println("########################################################################");
-        System.out.println("Current Directory: " + userDirectory);
+        System.out.println("###################################################################");
+        System.out.println("Path: ");
+        
+        // For debuging purposes
+        // System.out.println("Current Directory: " + userDirectory);
  
         try {
             long start = System.currentTimeMillis();
              
-            FileInputStream inputStream = new FileInputStream(excelFilePath);
+            
+            /**
+            InputStream initialStream = file.getInputStream();
+            byte[] buffer = new byte[initialStream.available()];
+            initialStream.read(buffer);
+			**/
+
+            File targetFile = new File("src/main/resources/targetFile.tmp");
+            
+            
+            FileInputStream inputStream = new FileInputStream(targetFile);
  
             Workbook workbook = new XSSFWorkbook(inputStream);
  
@@ -66,8 +76,10 @@ public class ExcelToFirebase {
                         break;
                     }
                 }
-                
-                empList.add(emp);
+               
+                if (emp.getName() != null && emp.getName() != "") {
+                	empList.add(emp);
+                }
             }
  
             workbook.close();

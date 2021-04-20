@@ -66,6 +66,10 @@ public class APIController {
 	
 	@PostMapping("/createMultipleEmployees")
     public String createPatient(@RequestBody List<Employee> empList) throws InterruptedException, ExecutionException {
+		
+		System.out.println("###################################################################");
+        System.out.println(empList.toString());
+		
        return employeeService.saveEmployees(empList);
     }
 	

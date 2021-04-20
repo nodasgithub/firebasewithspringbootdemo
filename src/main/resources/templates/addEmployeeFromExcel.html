@@ -12,8 +12,11 @@ th:href="@{/css/style.css}"/>
 <h1>This is the import employees from excel page.</h1>
 
 
-<a th:href="@{/employees/import/excel}"><button>Import from Excel</button></a><br>
+<form action="#" th:action="@{/employees/import/excel}" enctype="multipart/form-data" method="post">
+	<input type="file" name="file" value="Upload File" required><br>
 
+	<input type="submit" value="Import Excel">
+</form>
 
 <a th:href="@{/}"><button>Go Home</button></a><br>
 
