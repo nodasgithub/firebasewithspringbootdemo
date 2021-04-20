@@ -26,10 +26,7 @@ public class EmployeeService {
 	}
 	
 	public String saveEmployees(List<Employee> empList) throws InterruptedException, ExecutionException {  
-		Firestore dbFirestore = FirestoreClient.getFirestore();  
-		
-		System.out.println("###################################################################");
-		System.out.println("In the save empoyees class: " + empList.toString());
+		Firestore dbFirestore = FirestoreClient.getFirestore();
 		
 		for (Employee employee: empList) {
 			ApiFuture<WriteResult> collectionsApiFuture = dbFirestore.collection(COL_NAME).document(employee.getName()).set(employee);
