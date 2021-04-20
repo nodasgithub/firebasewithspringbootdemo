@@ -73,25 +73,18 @@ public class APIController {
        return employeeService.saveEmployees(empList);
     }
 	
-	@PutMapping("/updateEmployee")  
+	@PostMapping("/updateEmployee")  
 	public String updatePatient(@RequestBody Employee employee) throws InterruptedException, ExecutionException {  
 		return employeeService.updateEmployeeDetails(employee);  
 	}  
 	 
-	@GetMapping("/getEmployeeDetails")  
-	public Employee getPatient(@RequestParam String name) throws InterruptedException, ExecutionException {  
-		return employeeService.getEmployeeDetails(name);  
-	}
-	
-	/*
 	@GetMapping("/getEmployeeDetails/{id}")  
-	public Employee getPatient(@PathVariable int id) throws InterruptedException, ExecutionException {  
+	public Employee getPatient(@PathVariable String id) throws InterruptedException, ExecutionException {  
 		return employeeService.getEmployeeDetails(id);  
 	}
-	*/
 	 
-	@DeleteMapping("/deleteEmployee")  
-	public String deletePatient(@RequestParam String name) {  
-		return employeeService.deleteEmployee(name);  
+	@PostMapping("/deleteEmployee")  
+	public String deletePatient(@RequestBody String id) throws InterruptedException, ExecutionException {  
+		return employeeService.deleteEmployee(id);  
 	}
 }

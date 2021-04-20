@@ -61,7 +61,8 @@ public class ExcelToFirebase {
  
                     switch (columnIndex) {
                     case 0:
-                    	int id = (int) nextCell.getNumericCellValue();
+                    	// This id is String
+                    	String id = nextCell.getStringCellValue();
                     	emp.setId(id);
                         break;
                         
